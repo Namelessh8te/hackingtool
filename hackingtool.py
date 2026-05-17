@@ -119,7 +119,7 @@ def show_help():
         Text.assemble(
             ("  Main menu\n", "bold white"),
             ("  ─────────────────────────────────────\n", "dim"),
-            ("  1–20   ", "bold cyan"), ("open a category\n", "white"),
+            ("  120   ", "bold cyan"), ("open a category\n", "white"),
             ("  21     ", "bold cyan"), ("Update / Uninstall hackingtool\n", "white"),
             ("  / or s ", "bold cyan"), ("search tools by name or keyword\n", "white"),
             ("  t      ", "bold cyan"), ("filter tools by tag (osint, web, c2, ...)\n", "white"),
@@ -128,7 +128,7 @@ def show_help():
             ("  q      ", "bold cyan"), ("quit hackingtool\n\n", "white"),
             ("  Inside a category\n", "bold white"),
             ("  ─────────────────────────────────────\n", "dim"),
-            ("  1–N    ", "bold cyan"), ("select a tool\n", "white"),
+            ("  1N    ", "bold cyan"), ("select a tool\n", "white"),
             ("  99     ", "bold cyan"), ("back to main menu\n", "white"),
             ("  98     ", "bold cyan"), ("open project page (if available)\n\n", "white"),
             ("  Inside a tool\n", "bold white"),
@@ -147,7 +147,7 @@ def show_help():
 
 # ── Header: ASCII art + live system info ──────────────────────────────────────
 
-# Full "HACKING TOOL" block-letter art — 12 lines, split layout with stats
+# Full "HACKING TOOL" block-letter art  12 lines, split layout with stats
 _BANNER_ART = [
     " ██╗  ██╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗ ",
     " ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██║████╗  ██║██╔════╝ ",
@@ -169,7 +169,7 @@ _QUOTES = [
     '"There is no patch for human stupidity."',
     '"In God we trust. All others we monitor."',
     '"Hackers are the immune system of the internet."',
-    '"Every system is hackable — know yours before others do."',
+    '"Every system is hackable  know yours before others do."',
     '"Enumerate before you exploit."',
     '"A scope defines your playground."',
     '"The more you sweat in training, the less you bleed in battle."',
@@ -199,7 +199,7 @@ def _sys_info() -> dict:
 
     info["host"] = socket.gethostname()
 
-    # Local IP — connect to a routable address without sending data
+    # Local IP  connect to a routable address without sending data
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.settimeout(0)
@@ -222,7 +222,7 @@ def _build_header() -> Panel:
         ("  kernel  ›  ", info["kernel"][:34]),
         ("  user    ›  ", f"{info['user']} @ {info['host'][:20]}"),
         ("  ip      ›  ", info["ip"]),
-        ("  tools   ›  ", f"{len(all_tools)} categories · 185+ modules"),
+        ("  tools   ›  ", /n"{len(all_tools)} categories · 185+ modules"),
         ("  session ›  ", info["time"]),
         ("", ""),
         ("  python  ›  ", f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"),
@@ -315,7 +315,7 @@ def build_menu():
     )
 
     # ── Claude-style dual-line prompt area ──
-    console.print(Rule(style="dim magenta"))
+    console.print(Rule(style="dim magenta - hackingtool.py:318"))
     console.print(
         "  [dim cyan]/[/dim cyan][dim]search[/dim]  "
         "[dim cyan]t[/dim cyan] [dim]tags[/dim]  "
@@ -396,7 +396,7 @@ def filter_by_tag():
     tag = Prompt.ask("[bold cyan]Enter tag[/bold cyan]", default="").strip().lower()
     if not tag or tag not in tag_index:
         if tag:
-            console.print(f"[dim]Tag '{tag}' not found.[/dim]")
+            console.print(f"[dim]Tag '{tag}' not found.[/dim] - hackingtool.py:399")
             Prompt.ask("[dim]Press Enter to return[/dim]", default="")
         return
 
@@ -495,7 +495,7 @@ def recommend_tools():
                     matches.append((tool, cat))
 
         if not matches:
-            console.print("[dim]No tools found for this task.[/dim]")
+            console.print("[dim]No tools found for this task.[/dim] - hackingtool.py:498")
             Prompt.ask("[dim]Press Enter to return[/dim]", default="")
             return
 
@@ -528,7 +528,7 @@ def recommend_tools():
 
 
 def search_tools(query: str | None = None):
-    """Search tools — accepts inline query or prompts for one."""
+    """Search tools  accepts inline query or prompts for one."""
     if query is None:
         query = Prompt.ask("[bold cyan]/ Search[/bold cyan]", default="").strip().lower()
     else:
@@ -548,7 +548,7 @@ def search_tools(query: str | None = None):
             matches.append((tool, category))
 
     if not matches:
-        console.print(f"[dim]No tools found matching '{query}'[/dim]")
+        console.print(f"[dim]No tools found matching '{query}'[/dim] - hackingtool.py:551")
         Prompt.ask("[dim]Press Enter to return[/dim]", default="")
         return
 
@@ -563,7 +563,7 @@ def search_tools(query: str | None = None):
     table.add_column("Description", style="white", overflow="fold")
 
     for i, (tool, cat) in enumerate(matches, start=1):
-        desc = (tool.DESCRIPTION or "—").splitlines()[0]
+        desc = (tool.DESCRIPTION or "").splitlines()[0]
         table.add_row(str(i), tool.TITLE, cat, desc)
 
     table.add_row("99", "Back to main menu", "", "")
@@ -626,7 +626,7 @@ def interact_menu():
 
             if raw_lower in ("q", "quit", "exit"):
                 console.print(Panel(
-                    "[bold white on magenta]  Goodbye — Come Back Safely  [/bold white on magenta]",
+                    "[bold white on magenta]  Goodbye  Come Back Safely  [/bold white on magenta]",
                     box=box.HEAVY, border_style="magenta",
                 ))
                 break
@@ -634,7 +634,7 @@ def interact_menu():
             try:
                 choice = int(raw_lower)
             except ValueError:
-                console.print("[red]⚠  Invalid input — enter a number, /query to search, or q to quit.[/red]")
+                console.print("[red]⚠  Invalid input  enter a number, /query to search, or q to quit.[/red] - hackingtool.py:637")
                 Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
                 continue
 
@@ -653,11 +653,11 @@ def interact_menu():
                     ))
                     Prompt.ask("[dim]Press Enter to return to main menu[/dim]", default="")
             else:
-                console.print(f"[red]⚠  Choose 1–{len(all_tools)}, ? for help, or q to quit.[/red]")
+                console.print(f"[red]⚠  Choose 1{len(all_tools)}, ? for help, or q to quit.[/red] - hackingtool.py:656")
                 Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
 
         except KeyboardInterrupt:
-            console.print("\n[bold red]Interrupted — exiting[/bold red]")
+            console.print("\n[bold red]Interrupted  exiting[/bold red] - hackingtool.py:660")
             break
 
 
@@ -668,19 +668,19 @@ def main():
         from os_detect import CURRENT_OS
 
         if CURRENT_OS.system == "windows":
-            console.print(Panel("[bold red]Please run this tool on Linux or macOS.[/bold red]"))
+            console.print(Panel("[bold red]Please run this tool on Linux or macOS.[/bold red] - hackingtool.py:671"))
             if Confirm.ask("Open guidance link in your browser?", default=True):
                 webbrowser.open_new_tab(f"{REPO_WEB_URL}#windows")
             return
 
         if CURRENT_OS.system not in ("linux", "macos"):
-            console.print(f"[yellow]Unsupported OS: {CURRENT_OS.system}. Proceeding anyway...[/yellow]")
+            console.print(f"[yellow]Unsupported OS: {CURRENT_OS.system}. Proceeding anyway...[/yellow] - hackingtool.py:677")
 
         get_tools_dir()   # ensures ~/.hackingtool/tools/ exists
         interact_menu()
 
     except KeyboardInterrupt:
-        console.print("\n[bold red]Exiting...[/bold red]")
+        console.print("\n[bold red]Exiting...[/bold red] - hackingtool.py:683")
 
 
 if __name__ == "__main__":

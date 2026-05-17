@@ -6,7 +6,10 @@ class BloodHound(HackingTool):
     TITLE = "BloodHound (AD Attack Paths)"
     DESCRIPTION = "Uses graph theory to reveal hidden attack paths in Active Directory/Azure environments."
     INSTALL_COMMANDS = [
-        "pip install --user bloodhound",
+        "# The command `pip install --user bloodhound` is installing the Python package named
+        # "bloodhound" specifically for the current user, which means it will be installed in the
+        # user's home directory rather than system-wide.
+        pip install --user bloodhound",
         "sudo apt-get install -y neo4j",
     ]
     RUN_COMMANDS = ["bloodhound-python --help"]
