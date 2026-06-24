@@ -53,7 +53,7 @@ from tools.active_directory import ActiveDirectoryTools
 from tools.cloud_security import CloudSecurityTools
 from tools.mobile_security import MobileSecurityTools
 
-# ── Tool registry ──────────────────────────────────────────────────────────────
+# ── Tool registry ───────────────────────────────────────────────────────────────
 
 # (full_title, icon, menu_label)
 # menu_label is the concise name shown in the 2-column main menu grid.
@@ -119,8 +119,8 @@ def show_help():
         Text.assemble(
             ("  Main menu\n", "bold white"),
             ("  ─────────────────────────────────────\n", "dim"),
-            ("  120   ", "bold cyan"), ("open a category\n", "white"),
-            ("  21     ", "bold cyan"), ("Update / Uninstall hackingtool\n", "white"),
+            ("  1–20  ", "bold cyan"), ("open a category\n", "white"),
+            ("  22    ", "bold cyan"), ("Launch GUI Tool Manager\n", "white"),
             ("  / or s ", "bold cyan"), ("search tools by name or keyword\n", "white"),
             ("  t      ", "bold cyan"), ("filter tools by tag (osint, web, c2, ...)\n", "white"),
             ("  r      ", "bold cyan"), ("recommend tools for a task\n", "white"),
@@ -128,7 +128,7 @@ def show_help():
             ("  q      ", "bold cyan"), ("quit hackingtool\n\n", "white"),
             ("  Inside a category\n", "bold white"),
             ("  ─────────────────────────────────────\n", "dim"),
-            ("  1N    ", "bold cyan"), ("select a tool\n", "white"),
+            ("  1–N    ", "bold cyan"), ("select a tool\n", "white"),
             ("  99     ", "bold cyan"), ("back to main menu\n", "white"),
             ("  98     ", "bold cyan"), ("open project page (if available)\n\n", "white"),
             ("  Inside a tool\n", "bold white"),
@@ -222,7 +222,7 @@ def _build_header() -> Panel:
         ("  kernel  ›  ", info["kernel"][:34]),
         ("  user    ›  ", f"{info['user']} @ {info['host'][:20]}"),
         ("  ip      ›  ", info["ip"]),
-        ("  tools   ›  ", /n"{len(all_tools)} categories · 185+ modules"),
+        ("  tools   ›  ", f"{len(all_tools)} categories · 185+ modules"),
         ("  session ›  ", info["time"]),
         ("", ""),
         ("  python  ›  ", f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"),
@@ -275,11 +275,11 @@ def build_menu():
     console.print(_build_header())
 
     # ── 2-column category grid ──
-    # Items 1-17 in two columns, item 18 (ToolManager) shown separately
-    categories = tool_definitions[:-1]   # 17 items
+    # Items 1-20 in two columns, item 21 (ToolManager) and item 22 (GUI Manager) shown separately
+    categories = tool_definitions[:-1]   # 20 items
     update_def = tool_definitions[-1]    # ToolManager
 
-    mid = (len(categories) + 1) // 2    # 9  (left), 8 (right)
+    mid = (len(categories) + 1) // 2    # 10  (left), 10 (right)
     left  = list(enumerate(categories[:mid],  start=1))
     right = list(enumerate(categories[mid:],  start=mid + 1))
 
@@ -307,15 +307,21 @@ def build_menu():
         padding=(0, 1),
     ))
 
-    # ── ToolManager row ──
+    # ── ToolManager and GUI Manager rows ──
     tm_num = len(categories) + 1
+    gui_num = len(categories) + 2
+    
     console.print(
         f"  [bold magenta]  {tm_num}[/bold magenta]  {update_def[1]}  "
         f"[magenta]{update_def[2]}[/magenta]"
     )
+    console.print(
+        f"  [bold magenta]  {gui_num}[/bold magenta]  🖥 "
+        f"[magenta]GUI Tool Manager[/magenta]"
+    )
 
     # ── Claude-style dual-line prompt area ──
-    console.print(Rule(style="dim magenta - hackingtool.py:318"))
+    console.print(Rule(style="dim magenta - hackingtool.py:319"))
     console.print(
         "  [dim cyan]/[/dim cyan][dim]search[/dim]  "
         "[dim cyan]t[/dim cyan] [dim]tags[/dim]  "
@@ -325,7 +331,7 @@ def build_menu():
     )
 
 
-# ── Search ─────────────────────────────────────────────────────────────────────
+# ── Search ─────────────────────────────────────────────────────────────────
 
 def _collect_all_tools() -> list[tuple]:
     """Walk all collections and return (tool_instance, category_name) pairs."""
@@ -587,6 +593,54 @@ def search_tools(query: str | None = None):
         tool.show_options()
 
 
+def launch_gui_manager():
+    """Launch the GUI Tool Manager in a new process."""
+    from pathlib import Path
+    import subprocess
+    
+    gui_script = Path(__file__).parent / "tools" / "tool_manager_gui.py"
+    
+    if not gui_script.exists():
+        console.print(Panel(
+            "[bold red]GUI Tool Manager script not found![/bold red]\n"
+            f"Expected: {gui_script}",
+            border_style="red", box=box.ROUNDED,
+        ))
+        Prompt.ask("[dim]Press Enter to return[/dim]", default="")
+        return
+    
+    # Check if PyQt6 is installed
+    try:
+        import PyQt6
+    except ImportError:
+        console.print(Panel(
+            "[bold red]PyQt6 is not installed![/bold red]\n\n"
+            "Install it with:\n"
+            "[bold cyan]pip install PyQt6[/bold cyan]",
+            border_style="red", box=box.ROUNDED,
+        ))
+        if Confirm.ask("Install PyQt6 now?", default=True):
+            os.system(f"{sys.executable} -m pip install PyQt6")
+        Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
+        return
+    
+    console.print(Panel(
+        "[bold green]🖥  Launching GUI Tool Manager...[/bold green]",
+        border_style="green", box=box.ROUNDED,
+    ))
+    
+    # Launch in background
+    try:
+        subprocess.Popen([sys.executable, str(gui_script)])
+        Prompt.ask("[dim]GUI launched! Press Enter to return to menu[/dim]", default="")
+    except Exception as e:
+        console.print(Panel(
+            f"[bold red]Failed to launch GUI:[/bold red]\n{str(e)}",
+            border_style="red", box=box.ROUNDED,
+        ))
+        Prompt.ask("[dim]Press Enter to return[/dim]", default="")
+
+
 # ── Main interaction loop ──────────────────────────────────────────────────────
 
 def interact_menu():
@@ -638,6 +692,11 @@ def interact_menu():
                 Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
                 continue
 
+            # GUI Manager is option 22
+            if choice == 22:
+                launch_gui_manager()
+                continue
+
             if 1 <= choice <= len(all_tools):
                 title, icon, _ = tool_definitions[choice - 1]
                 console.print(Panel(
@@ -653,7 +712,7 @@ def interact_menu():
                     ))
                     Prompt.ask("[dim]Press Enter to return to main menu[/dim]", default="")
             else:
-                console.print(f"[red]⚠  Choose 1{len(all_tools)}, ? for help, or q to quit.[/red] - hackingtool.py:656")
+                console.print(f"[red]⚠  Choose 1–{len(all_tools)+1}, ? for help, or q to quit.[/red] - hackingtool.py:656")
                 Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
 
         except KeyboardInterrupt:
@@ -661,7 +720,7 @@ def interact_menu():
             break
 
 
-# ── Entry point ────────────────────────────────────────────────────────────────
+# ── Entry point ──────────────────────────────────────────────────────────────
 
 def main():
     try:
