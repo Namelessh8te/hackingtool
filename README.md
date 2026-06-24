@@ -18,8 +18,9 @@
 ![](https://img.shields.io/badge/Linux_%7C_Kali_%7C_Parrot_%7C_macOS-FFA116?style=for-the-badge&logo=linux&logoColor=white)
 
 <a href="#installation"><img src="https://img.shields.io/badge/Install_Now-00FF88?style=for-the-badge&logo=rocket&logoColor=black" alt="Install Now"></a>&nbsp;
-<a href="#quick-commands"><img src="https://img.shields.io/badge/Quick_Commands-7B61FF?style=for-the-badge&logo=terminal&logoColor=white" alt="Quick Commands"></a>&nbsp;
-<a href="https://github.com/Z4nzu/hackingtool/issues/new?template=tool_request.md"><img src="https://img.shields.io/badge/Suggest_a_Tool-FF61DC?style=for-the-badge&logo=plus&logoColor=white" alt="Suggest a Tool"></a>
+<a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-7B61FF?style=for-the-badge&logo=terminal&logoColor=white" alt="Quick Start"></a>&nbsp;
+<a href="#gui-tool-manager"><img src="https://img.shields.io/badge/GUI_Manager-FF61DC?style=for-the-badge&logo=monitor&logoColor=white" alt="GUI Manager"></a>&nbsp;
+<a href="https://github.com/Z4nzu/hackingtool/issues/new?template=tool_request.md"><img src="https://img.shields.io/badge/Suggest_a_Tool-FF61DC?style=for-the-badge&logo=plus&logoColor=white" alt="Suggest a Tool"></a>&nbsp;
 
 </div>
 
@@ -43,6 +44,8 @@
 | **⚡** | **Install all** | Option `97` in any category — batch install at once |
 | **🔄** | **Smart update** | Each tool has Update — auto-detects git pull / pip upgrade / go install |
 | **📂** | **Open folder** | Jump into any tool's directory for manual inspection |
+| **🖥️ NEW** | **GUI Manager** | Modern graphical interface for updates & uninstalls |
+| **🎨 NEW** | **Desktop Icons** | Create professional desktop shortcuts & app icons |
 | **🐳** | **Docker** | Builds locally — no unverified external images |
 | **🚀** | **One-liner install** | `curl -sSL .../install.sh \| sudo bash` — zero manual steps |
 | **🏢** | **3 new categories** | Active Directory, Cloud Security, Mobile Security |
@@ -51,6 +54,32 @@
 </table>
 
 
+
+---
+
+## Quick Start
+
+### CLI Mode (Terminal)
+
+```bash
+# Start the application
+hackingtool
+
+# Or directly run
+python3 hackingtool.py
+```
+
+### GUI Mode (Graphical)
+
+From the main menu, enter:
+```
+22
+```
+
+Or launch directly:
+```bash
+python3 tools/tool_manager_gui.py
+```
 
 ---
 
@@ -63,6 +92,7 @@
 | `/query` | **Search** — find tools instantly by keyword | Main menu |
 | `t` | **Tags** — filter by osint, scanner, c2, cloud, mobile... | Main menu |
 | `r` | **Recommend** — "I want to do X" → matching tools | Main menu |
+| `22` | **GUI Manager** — launch graphical interface | Main menu |
 | `?` | **Help** — quick reference card | Everywhere |
 | `q` | **Quit** — exit from any depth | Everywhere |
 | `97` | **Install All** — batch install all tools in category | Category |
@@ -72,6 +102,80 @@
 
 ---
 
+## GUI Tool Manager
+
+### What is it?
+
+The **GUI Tool Manager** is a modern graphical interface for managing HackingTool system updates and uninstalls. No terminal knowledge needed!
+
+### How to Use
+
+#### **Option 1: From Main Menu**
+1. Run: `hackingtool`
+2. Enter: `22`
+3. GUI window opens instantly
+
+#### **Option 2: Direct Launch**
+```bash
+python3 ~/hackingtool/tools/tool_manager_gui.py
+```
+
+#### **Option 3: Desktop Icon**
+1. First-time setup:
+   ```bash
+   python3 ~/hackingtool/tools/create_desktop_shortcut.py
+   ```
+2. Click the **HackingTool Manager GUI** icon on your desktop
+
+### GUI Features
+
+**🔄 Update Tab**
+- Update system packages automatically
+- Update HackingTool to the latest version
+- Real-time command output
+- Progress indicator
+
+**🗑️ Uninstall Tab**
+- Safely remove HackingTool
+- Optional: Remove user configuration data
+- Step-by-step confirmation dialogs
+
+**ℹ️ Info Tab**
+- Project information
+- Installation paths
+- Feature overview
+
+### Desktop Integration
+
+Create professional desktop icons in one command:
+
+```bash
+# Install icon generator dependencies
+pip install pillow
+
+# Generate icons
+python3 ~/hackingtool/tools/generate_icons.py
+```
+
+**Creates:**
+- 🖼️ Multiple resolution PNGs (16x16 to 512x512)
+- 🌐 Web favicon
+- 🖥️ Desktop shortcuts (Linux, macOS, Windows)
+
+### Installation Requirements
+
+```bash
+# For GUI
+pip install PyQt6
+
+# For icon generation
+pip install pillow
+
+# All dependencies
+pip install -r requirements.txt
+```
+
+---
 
 ## Tool Categories
 
@@ -496,6 +600,16 @@ docker compose down -v     # also remove data volume
 
 ```bash
 pip install -r requirements.txt
+```
+
+### GUI & Icons (Optional)
+
+```bash
+# For GUI manager
+pip install PyQt6
+
+# For icon generation
+pip install pillow
 ```
 
 ---
