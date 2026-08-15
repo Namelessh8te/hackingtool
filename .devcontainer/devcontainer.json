@@ -4,7 +4,7 @@
   "remoteUser": "root",
   "containerUser": "root",
   "updateRemoteUserUID": false,
-  "postCreateCommand": "python -m pip install --disable-pip-version-check -r .devcontainer/requirements.txt",
+  "postCreateCommand": "python -m pip install --disable-pip-version-check -e . -r .devcontainer/requirements.txt",
   "customizations": {
     "vscode": {
       "extensions": [
